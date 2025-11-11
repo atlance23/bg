@@ -9,8 +9,19 @@ export default function Calculator() {
         let bg;
         let recommendedDose;
 
-        carbs = document.getElementById('carbs').value;
-        bg = document.getElementById('bg').value;
+        // Error checking
+        if (document.getElementById('carbs').value >= 0 && document.getElementById('bg').value >= 0) {
+            carbs = document.getElementById('carbs').value;
+            bg = document.getElementById('bg').value;
+        } else {
+            alert('Please enter valid numbers for both blood glucose and carbohydrate intake.');
+            return;
+        }
+        
+        if (document.getElementById('bg').value < 100) {
+            alert('Please do not does with insulin if bg is less than 100 mg/dL.');
+        }
+
         recommendedDose = (carbs / 15) + ((bg - 160) / 40);
         document.getElementById('recommendedDose').innerText = Math.ceil(recommendedDose).toFixed(2) + ' units';
     };
