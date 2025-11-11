@@ -35,7 +35,14 @@ export default function Calculator() {
          * Calculate recommended dose based on blood glucose and carbohydrate intake
          */
         if ((document.getElementById('bg').value - TARGET_BG) < 0) {
-            recommendedDose = `${Math.abs(Math.floor(((bg - TARGET_BG) / ICR) * 10))} carbs`;
+            let recommendedDoseDraft = Math.abs(Math.floor(((bg - TARGET_BG) / ICR) * 10)) - carbs;
+
+            if (recommendedDoseDraft > 0) {
+                recommendedDose = `${recommendedDoseDraft} CARBS ONLY - NO INSULIN NEEDED`;
+            } else if (recommendedDoseDraft < 0) {
+                recommendedDose = `${Math.ceil((carbs / 15) + ((bg - TARGET_BG) / 40)).toFixed(2)} units`;
+            }
+
         } else {
             recommendedDose = `${Math.ceil((carbs / 15) + ((bg - TARGET_BG) / 40)).toFixed(2)} units`;
         }
