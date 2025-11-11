@@ -35,7 +35,6 @@ export default function Calculator() {
          * Calculate recommended dose based on blood glucose and carbohydrate intake
          */
         if ((document.getElementById('bg').value - TARGET_BG) < 0) {
-            document.getElementById('recommendedDoseLabel').innerText = 'Recommended Carbs:';
             recommendedDose = `${Math.abs(Math.floor(((bg - TARGET_BG) / ICR) * 10))} carbs`;
         } else {
             recommendedDose = `${Math.ceil((carbs / 15) + ((bg - TARGET_BG) / 40)).toFixed(2)} units`;
@@ -53,7 +52,7 @@ export default function Calculator() {
                     <input id="bg" type="text" className="input" style={{border: '1px solid #99999999', borderRadius: '50px', color: '#000', padding: '0 0.5rem'}}/>
                     <label className="inputLabel" style={{color: '#000'}}>Enter Carbs:</label>
                     <input id="carbs" type="text" className="input" style={{border: '1px solid #99999999', borderRadius: '50px', color: '#000', padding: '0 0.5rem'}}/>
-                    <label id="recommendedDoseLabel" className="inputLabel" style={{color: '#000'}}>Recommended Dose:</label>
+                    <label id="recommendedDoseLabel" className="inputLabel" style={{color: '#000'}}>Recommended Action:</label>
                     <div id="recommendedDose" className="input" style={{height: '32px', borderRadius: '50px', color: '#000'}}></div>
                     <div id="calculate" onClick={() => {calculateDose()}} style={{cursor: 'pointer', backgroundColor: 'darkturquoise', height: '40px', borderRadius: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 800}}>Calculate</div>
                 </form>
