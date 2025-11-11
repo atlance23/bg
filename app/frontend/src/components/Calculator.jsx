@@ -3,6 +3,7 @@ export default function Calculator() {
         // Constants for Insulin Sensitivity Factor (ISF) and Insulin-to-Carb Ratio (ICR)
         const ISF = 40;
         const ICR = 15;
+        const TARGET_BG = 160;
         
         // Get user inputs
         let carbs;
@@ -10,6 +11,10 @@ export default function Calculator() {
         let recommendedDose;
 
         // Error checking
+
+        /**
+         * If either input is not a number or is negative, alert the user and return
+         */
         if (document.getElementById('carbs').value >= 0 && document.getElementById('bg').value >= 0) {
             carbs = document.getElementById('carbs').value;
             bg = document.getElementById('bg').value;
@@ -17,13 +22,27 @@ export default function Calculator() {
             alert('Please enter valid numbers for both blood glucose and carbohydrate intake.');
             return;
         }
+
+        /**
+         * If blood glucose is less than 100 mg/dL, alert the user and return
+         */
         
         if (document.getElementById('bg').value < 100) {
-            alert('Please do not does with insulin if bg is less than 100 mg/dL.');
+            // alert('Please do not does with insulin if bg is less than 100 mg/dL.');
         }
 
-        recommendedDose = (carbs / 15) + ((bg - 160) / 40);
-        document.getElementById('recommendedDose').innerText = Math.ceil(recommendedDose).toFixed(2) + ' units';
+        /**
+         * Calculate recommended dose based on blood glucose and carbohydrate intake
+         */
+        if ((document.getElementById('bg').value - TARGET_BG) < 0) {
+            document.getElementById('recommendedDoseLabel').innerText = 'Recommended Carbs:';
+            recommendedDose = `${Math.abs(Math.floor(((bg - TARGET_BG) / ICR) * 10))} carbs`;
+        } else {
+            recommendedDose = `${Math.ceil((carbs / 15) + ((bg - TARGET_BG) / 40)).toFixed(2)} units`;
+        }
+
+        
+        document.getElementById('recommendedDose').innerText = recommendedDose;
     };
 
     return (
@@ -34,7 +53,7 @@ export default function Calculator() {
                     <input id="bg" type="text" className="input" style={{border: '1px solid #99999999', borderRadius: '50px', color: '#000', padding: '0 0.5rem'}}/>
                     <label className="inputLabel" style={{color: '#000'}}>Enter Carbs:</label>
                     <input id="carbs" type="text" className="input" style={{border: '1px solid #99999999', borderRadius: '50px', color: '#000', padding: '0 0.5rem'}}/>
-                    <label className="inputLabel" style={{color: '#000'}}>Recommended Dose:</label>
+                    <label id="recommendedDoseLabel" className="inputLabel" style={{color: '#000'}}>Recommended Dose:</label>
                     <div id="recommendedDose" className="input" style={{height: '32px', borderRadius: '50px', color: '#000'}}></div>
                     <div id="calculate" onClick={() => {calculateDose()}} style={{cursor: 'pointer', backgroundColor: 'darkturquoise', height: '40px', borderRadius: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 800}}>Calculate</div>
                 </form>
