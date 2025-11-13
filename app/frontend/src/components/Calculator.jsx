@@ -1,7 +1,7 @@
 export default function Calculator() {
     const calculateDose = () => {
         // Constants for Insulin Sensitivity Factor (ISF) and Insulin-to-Carb Ratio (ICR)
-        const ISF = 40;
+        const ISF = 50;
         const ICR = 15;
         const TARGET_BG = 160;
         
@@ -35,12 +35,12 @@ export default function Calculator() {
          * Calculate recommended dose based on blood glucose and carbohydrate intake
          */
         if ((document.getElementById('bg').value - TARGET_BG) < 0) {
-            let recommendedDoseDraft = Math.abs(Math.floor(((bg - TARGET_BG) / ICR) * 10)) - carbs;
+            let recommendedDoseDraft = Math.abs(Math.floor(((bg - TARGET_BG) / ISF) * 10)) - carbs;
 
             if (recommendedDoseDraft > 0) {
                 recommendedDose = `${recommendedDoseDraft} CARBS ONLY - NO INSULIN NEEDED`;
             } else if (recommendedDoseDraft < 0) {
-                recommendedDose = `${Math.ceil((carbs / 15) + ((bg - TARGET_BG) / 40)).toFixed(2)} units`;
+                recommendedDose = `${Math.ceil((carbs / 15) + ((bg - TARGET_BG) / ISF)).toFixed(2)} units`;
             }
 
         } else {
